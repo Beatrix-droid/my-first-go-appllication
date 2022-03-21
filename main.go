@@ -34,6 +34,8 @@ for{
 
 	var isValidTicketNumber bool = userTickets > 0 && userTickets <= remainingTickets
 
+	remainingTickets = remainingTickets - userTickets
+	fmt.Printf("Thank you %v  for booking %v tickets. You will recieve a confirmation email at %v \n", userName, userTickets, email)
 
 	if userTickets > remainingTickets {
 
@@ -92,4 +94,27 @@ for{
 		}
 
 	}
+
+	city := "London"
+
+	switch city {
+
+		case "New York":
+		// execute code for booking New York conference tickets
+
+		case " Singapore":
+		// execute code for booking Singapore conference tickets
+
+		case "London":
+		// execute code for booking Singapore conference tickets
+
+		case "Berlin":
+		// some code here
+
+		default:
+			fmt.Print("No valid city selected")
+
+
+	}
+
 }

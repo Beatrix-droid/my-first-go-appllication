@@ -14,32 +14,12 @@ var remainingTickets uint = 50
 greetUsers(conferenceName,conferenceTickets ,remainingTickets)
 
 for{
-	var userName string
-	var userTickets uint
-	var email string
-
 
 	//ask user for their name
-	fmt.Println("Enter your first name")
-	fmt.Scan(&userName)
 
-	var isValidName bool = len(userName) >=2
-
-
-	fmt.Println("Enter the number of tickets")
-	fmt.Scan(&userTickets)
-	var isValidTicketNumber bool = userTickets > 0 && userTickets <= remainingTickets
-
-	fmt.Println("Enter your email address")
-	fmt.Scan(&email)
-	var isValidEmail bool = strings.Contains(email, "@") //contains function is like "in" in python
-
-
-
-
+	userName, userTickets, email := getUserInput()
 
 	remainingTickets = remainingTickets - userTickets
-	fmt.Printf("Thank you %v  for booking %v tickets. You will recieve a confirmation email at %v \n", userName, userTickets, email)
 
 	if userTickets > remainingTickets {
 
@@ -47,7 +27,7 @@ for{
 		continue // so user has another chance to enter and book tickets.
 	}
 
-
+	isValidName, isValidTicketNumber, isValidEmail :=  validateUserInput(userName, userTickets, email, remainingTickets)
 
 
 	if !isValidName{
@@ -62,21 +42,17 @@ for{
 
 	if isValidEmail && isValidName && isValidTicketNumber{
 
-		remainingTickets = remainingTickets - userTickets
 
 
 		//arrays number defines how long the array is, the type ext to it defines what type the array will contain. arrays in go cannot mix and match types.
 		var bookings[] string
 
-		bookings = append(bookings, userName, email) //adding elements to a list
-		printName(bookings)
-		fmt.Printf("Thank you %v  for booking %v tickets. You will recieve a confirmation email at %v \n", userName, userTickets, email)
+		firstNames := returnName(bookings)
+		bookTickets (remainingTickets, userTickets, bookings, conferenceName, userName, email)
 
-		fmt.Printf("The whole array %v \n", bookings)
-		fmt.Printf("%v tickets remaining for  the %v\n", remainingTickets, conferenceName)
+		fmt.Printf("The names of bookings are %v \n", firstNames)
 
 	}
-
 
 
 	if remainingTickets == 0{
@@ -112,6 +88,7 @@ for{
 
 }
 
+
 //must tell funct the type of input paremeter it is expecting
 func greetUsers(conference string, confTickets uint, remainingTickets uint){
 	fmt.Printf("Welcome to our %v \n", conference)
@@ -119,15 +96,46 @@ func greetUsers(conference string, confTickets uint, remainingTickets uint){
 	fmt.Printf("We have %v tickets and  %v remaining available tickets\n", confTickets, remainingTickets)
 }
 
-
-func printName(bookings[] string){
+//when a func returns a value, its type must be specified after the parameters
+func returnName(bookings[] string)[]string{
 	firstNames := []string{}
 	for _, booking:= range bookings{
 		var names = strings.Fields(booking) // splits the string ith the white space as a separator, and returns a slice with split elements
 		var firstName = names[0]
 		firstNames = append(firstNames, firstName)
 	}
-	fmt.Printf("These are all our bookings %v\bn", bookings)
-	fmt.Printf("The first names of bookings are %v \n", firstNames)
+	return firstNames
+}
+func validateUserInput(userName string, userTickets uint, email string, remainingTickets uint)(bool, bool, bool) {
+	var isValidName bool = len(userName) >=2
+	var isValidTicketNumber bool = userTickets > 0 && userTickets <= remainingTickets
+	var isValidEmail bool = strings.Contains(email, "@") //contains function is like "in" in python
+	return isValidName,  isValidTicketNumber,  isValidEmail
 
+}
+
+
+func getUserInput()(string, uint, string){
+	var userName string
+	var userTickets uint
+	var email string
+
+	fmt.Println("Enter your first name")
+	fmt.Scan(&userName)
+	fmt.Println("Enter the number of tickets")
+	fmt.Scan(&userTickets)
+
+	fmt.Println("Enter your email address")
+	fmt.Scan(&email)
+
+	return userName, userTickets, email
+
+}
+
+
+func bookTickets (remainingTickets uint, userTickets uint, bookings[] string, conferenceName string, userName string, email string){
+	remainingTickets = remainingTickets - userTickets
+	bookings = append(bookings, userName, email) //adding elements to a list
+	fmt.Printf("Thank you %v  for booking %v tickets. You will recieve a confirmation email at %v \n", userName, userTickets, email)
+	fmt.Printf("%v tickets remaining for  the %v\n", remainingTickets, conferenceName)
 }

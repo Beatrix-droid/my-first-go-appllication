@@ -2,6 +2,7 @@ package main
 
 import "fmt"
 import "strings"
+import "booking-app/helper" //to use custom packeges just import the path of the directory they are located in
 
 func main(){
 
@@ -11,7 +12,7 @@ const conferenceTickets uint = 50
 var remainingTickets uint = 50
 
 
-greetUsers(conferenceName,conferenceTickets ,remainingTickets)
+greetUsers(conferenceName, conferenceTickets, remainingTickets)
 
 for{
 
@@ -27,7 +28,7 @@ for{
 		continue // so user has another chance to enter and book tickets.
 	}
 
-	isValidName, isValidTicketNumber, isValidEmail :=  validateUserInput(userName, userTickets, email, remainingTickets)
+	isValidName, isValidTicketNumber, isValidEmail :=  helper.ValidateUserInput(userName, userTickets, email, remainingTickets)
 
 
 	if !isValidName{
@@ -48,7 +49,7 @@ for{
 		var bookings[] string
 
 		firstNames := returnName(bookings)
-		bookTickets (remainingTickets, userTickets, bookings, conferenceName, userName, email)
+		bookTickets(remainingTickets, userTickets, bookings, conferenceName, userName, email)
 
 		fmt.Printf("The names of bookings are %v \n", firstNames)
 
@@ -105,13 +106,6 @@ func returnName(bookings[] string)[]string{
 		firstNames = append(firstNames, firstName)
 	}
 	return firstNames
-}
-func validateUserInput(userName string, userTickets uint, email string, remainingTickets uint)(bool, bool, bool) {
-	var isValidName bool = len(userName) >=2
-	var isValidTicketNumber bool = userTickets > 0 && userTickets <= remainingTickets
-	var isValidEmail bool = strings.Contains(email, "@") //contains function is like "in" in python
-	return isValidName,  isValidTicketNumber,  isValidEmail
-
 }
 
 

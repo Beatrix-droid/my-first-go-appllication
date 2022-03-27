@@ -130,6 +130,18 @@ func getUserInput()(string, uint, string){
 func bookTickets (remainingTickets uint, userTickets uint, bookings[] string, conferenceName string, userName string, email string){
 	remainingTickets = remainingTickets - userTickets
 	bookings = append(bookings, userName, email) //adding elements to a list
+
+	//create a map (python dict) for a user
+	//specify type of the key and of the value
+	var userData = make(map[string]string) // create an empty map wiht "make function"
+
+	//adding key value paris to the map:
+
+	userData["first name"] = userName
+	userData["email"] = email
+	userData["tickets booked"] = strconv.FormatUint(uint64(userTickets), 10) //convert the user tickets into a string
+
+
 	fmt.Printf("Thank you %v  for booking %v tickets. You will recieve a confirmation email at %v \n", userName, userTickets, email)
 	fmt.Printf("%v tickets remaining for  the %v\n", remainingTickets, conferenceName)
 }

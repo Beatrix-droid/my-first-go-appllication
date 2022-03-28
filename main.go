@@ -178,4 +178,3 @@ func sentTicket(userTickets uint, userName string, email string){
 //order in our application
 //to start another thread or routien when a function is called just write "go" in front of the function. This starts a new goroutine.
 // a goroutine is a lightweight thread managed by the Go runtime
-//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

@@ -1,8 +1,8 @@
 package main
 
 import "fmt"
-import "strings"
 import "booking-app/helper" //to use custom packeges just import the path of the directory they are located in
+import "strconv"
 
 func main(){
 
@@ -46,7 +46,7 @@ for{
 
 
 		//arrays number defines how long the array is, the type ext to it defines what type the array will contain. arrays in go cannot mix and match types.
-		var bookings[] string
+		var bookings = make([]map[string]string, 1) //a list/slice of maps
 
 		firstNames := returnName(bookings)
 		bookTickets(remainingTickets, userTickets, bookings, conferenceName, userName, email)
@@ -98,12 +98,11 @@ func greetUsers(conference string, confTickets uint, remainingTickets uint){
 }
 
 //when a func returns a value, its type must be specified after the parameters
-func returnName(bookings[] string)[]string{
+func returnName(bookings map)([]string){
 	firstNames := []string{}
 	for _, booking:= range bookings{
-		var names = strings.Fields(booking) // splits the string ith the white space as a separator, and returns a slice with split elements
-		var firstName = names[0]
-		firstNames = append(firstNames, firstName)
+		bookings["first name"] // splits the string ith the white space as a separator, and returns a slice with split elements
+		firstNames = append(firstNames, bookings["first name"])
 	}
 	return firstNames
 }
@@ -129,7 +128,7 @@ func getUserInput()(string, uint, string){
 
 func bookTickets (remainingTickets uint, userTickets uint, bookings[] string, conferenceName string, userName string, email string){
 	remainingTickets = remainingTickets - userTickets
-	bookings = append(bookings, userName, email) //adding elements to a list
+	bookings = append(bookings, userData) //adding elements to a list
 
 	//create a map (python dict) for a user
 	//specify type of the key and of the value

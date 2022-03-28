@@ -2,7 +2,12 @@ package main
 
 import "fmt"
 import "booking-app/helper" //to use custom packeges just import the path of the directory they are located in
+import "sync"
+import "time"
 
+
+var wg = sync.WaitGroup{}  //waits for launched goroutine to finish
+													//package "sync  provides basic Synchronization functionality"
 
 func main(){
 
@@ -25,7 +30,7 @@ type UserData struct{
 
 greetUsers(conferenceName, conferenceTickets, remainingTickets)
 
-for{
+
 
 	//ask user for their name
 
@@ -36,7 +41,7 @@ for{
 	if userTickets > remainingTickets {
 
 		fmt.Printf("We only have %v tickets remaining!", remainingTickets)
-		continue // so user has another chance to enter and book tickets.
+		//continue // so user has another chance to enter and book tickets.
 	}
 
 	isValidName, isValidTicketNumber, isValidEmail :=  helper.ValidateUserInput(userName, userTickets, email, remainingTickets)
@@ -59,6 +64,9 @@ for{
 
 		firstNames := returnName(bookings)
 		bookTickets(remainingTickets, userTickets, bookings, conferenceName, userName, email)
+
+		wg.Add(1) //add sets the number of goroutines to wait for (increases the counter by the provided number)
+		//the more go routiness you wait, the more numbers in the Add() function
 		go sentTicket(userTickets, userName, email)
 
 		fmt.Printf("The names of bookings are %v \n", firstNames)
@@ -68,10 +76,11 @@ for{
 
 	if remainingTickets == 0{
 		fmt.Printf( "We have run out of tickets, come back next year!")
-		break
+		//break
 		}
 
-	}
+	wg.Wait()//waitns for all the threads that were added, Blocks unit the WaitGroup counter is 0
+
 
 
 	//an illustration of the switch syntax
@@ -163,7 +172,7 @@ func bookTickets (remainingTickets uint, userTickets uint, bookings[] string, co
 
 //goroutines
 func sentTicket(userTickets uint, userName string, email string){
-
+	time.Sleep(50 * time.Second)
 	fmt.Printf("%v tickets for %v", userTickets, userName)
 	//saving formatted strings in a variables:
 	var ticket = fmt.Sprintf("%v tickets for %v", userTickets, userName) //to save formatted strings rather than priting them to the console
@@ -171,6 +180,7 @@ func sentTicket(userTickets uint, userName string, email string){
 	fmt.Printf("sending ticket:\n\n %v to email address %v", ticket, email)
 	fmt.Println("############")
 
+	wg.Done() //decrements the Waitgroup counter by 1. Thus this is called by the goroutine to indicate that it's finished
 }
 
 //concurrency in go is cheap and easy
@@ -178,3 +188,5 @@ func sentTicket(userTickets uint, userName string, email string){
 //order in our application
 //to start another thread or routien when a function is called just write "go" in front of the function. This starts a new goroutine.
 // a goroutine is a lightweight thread managed by the Go runtime
+
+//

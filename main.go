@@ -2,7 +2,7 @@ package main
 
 import "fmt"
 import "booking-app/helper" //to use custom packeges just import the path of the directory they are located in
-import "strconv"
+
 
 func main(){
 
@@ -10,7 +10,18 @@ func main(){
 var conferenceName = "Go Conference"
 const conferenceTickets uint = 50
 var remainingTickets uint = 50
+//arrays number defines how long the array is, the type ext to it defines what type the array will contain. arrays in go cannot mix and match types.
+var bookings = make([]UserData, 0) //a list/slice of maps
 
+
+// a struct can be thoguht of as dictionary that can have a mixed data type
+//or as a class where you specify the structure and the data type.
+
+type UserData struct{
+		username string //specify the data type for each key
+		email string
+		numberOfTickets uint
+}
 
 greetUsers(conferenceName, conferenceTickets, remainingTickets)
 
@@ -45,11 +56,10 @@ for{
 
 
 
-		//arrays number defines how long the array is, the type ext to it defines what type the array will contain. arrays in go cannot mix and match types.
-		var bookings = make([]map[string]string, 1) //a list/slice of maps
 
 		firstNames := returnName(bookings)
 		bookTickets(remainingTickets, userTickets, bookings, conferenceName, userName, email)
+		sentTicket(userTickets, userName, email)
 
 		fmt.Printf("The names of bookings are %v \n", firstNames)
 
@@ -98,11 +108,11 @@ func greetUsers(conference string, confTickets uint, remainingTickets uint){
 }
 
 //when a func returns a value, its type must be specified after the parameters
-func returnName(bookings map)([]string){
+func returnName(bookings map)(string){
 	firstNames := []string{}
 	for _, booking:= range bookings{
 		bookings["first name"] // splits the string ith the white space as a separator, and returns a slice with split elements
-		firstNames = append(firstNames, bookings["first name"])
+		firstNames = append(firstNames, bookings.userName)
 	}
 	return firstNames
 }
@@ -132,7 +142,13 @@ func bookTickets (remainingTickets uint, userTickets uint, bookings[] string, co
 
 	//create a map (python dict) for a user
 	//specify type of the key and of the value
-	var userData = make(map[string]string) // create an empty map wiht "make function"
+	var userData = UserData{
+		username: userName,
+		email: email,
+		numberOfTickets: userTickets,
+
+	}
+	 // create an empty map wiht "make function"
 
 	//adding key value paris to the map:
 
@@ -144,3 +160,17 @@ func bookTickets (remainingTickets uint, userTickets uint, bookings[] string, co
 	fmt.Printf("Thank you %v  for booking %v tickets. You will recieve a confirmation email at %v \n", userName, userTickets, email)
 	fmt.Printf("%v tickets remaining for  the %v\n", remainingTickets, conferenceName)
 }
+
+//goroutines
+func sentTicket(userTickets uint, userName string, email string){
+
+	fmt.Printf("%v tickets for %v", userTickets, userName)
+	//saving formatted strings in a variables:
+	var ticket = fmt.Sprintf("%v tickets for %v", userTickets, userName) //to save formatted strings rather than priting them to the console
+	fmt.Println("############")
+	fmt.Printf("sending ticket:\n\n %v to email address %v", ticket, email)
+	fmt.Println("############")
+
+}
+
+//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

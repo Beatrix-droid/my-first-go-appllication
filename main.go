@@ -59,7 +59,7 @@ for{
 
 		firstNames := returnName(bookings)
 		bookTickets(remainingTickets, userTickets, bookings, conferenceName, userName, email)
-		sentTicket(userTickets, userName, email)
+		go sentTicket(userTickets, userName, email)
 
 		fmt.Printf("The names of bookings are %v \n", firstNames)
 
@@ -173,4 +173,9 @@ func sentTicket(userTickets uint, userName string, email string){
 
 }
 
+//concurrency in go is cheap and easy
+//our applicaton runs in a single thread. So all code lines get executed one by one in tthis
+//order in our application
+//to start another thread or routien when a function is called just write "go" in front of the function. This starts a new goroutine.
+// a goroutine is a lightweight thread managed by the Go runtime
 //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
